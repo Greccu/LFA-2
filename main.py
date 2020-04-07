@@ -153,7 +153,6 @@ class Automat:
     #tranzitii - multimea de tranzitii stocate sub forma unui dictionar {stare:{tranzitie:[stare1,..]}
     def citire(self):
         with open("automat.in", 'r') as f:
-            f.readline()
             s = f.readline().split()  #
             self.stari = []
 
@@ -243,7 +242,22 @@ class Automat:
                                 tranzitie(i, m, tran, win)
                             afisate.append((i.nume, m.nume))
 
+    def verificare(self, cuvant):
+        s = self.sin
+        ok = 1
 
+        for i in cuvant:
+            if i in self.tranzitii[s].keys():
+                s = self.tranzitii[s][i]
+            else:
+                ok = 0
+
+        if (s in self.sfin) and ok == 1:
+            return 1
+        elif ok == 0:
+            return 0
+        else:
+            return -1
 
     def convert(self):
         stari2=copy(self.stari)
@@ -310,6 +324,16 @@ win = GraphWin("Automat", 1600, 800)
 win.setBackground('black')
 aut.afisare_grafica()
 aut.convert()
+print()
+#################
+cuv=""
+############
+if aut.verificare(cuv) == 1:
+    print("Cuvant acceptat")
+elif aut.verificare(cuv) == 0:
+    print("Cuvant respins (nu exista un drum posibil)")
+else:
+    print("Cuvant respins (nodul in care s-a oprit nu e stare finala)")
 aut.afisare_grafica(2)
 win.getMouse()
 #######################
