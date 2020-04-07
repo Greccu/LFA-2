@@ -69,17 +69,30 @@ def tranzitie(nod1, nod2, nume, win):
     y1 = nod1.y
     x2 = nod2.x
     y2 = nod2.y
+    xvar=(x1-x2)/10
+    yvar=(y1-y2)/10
+    x1-=xvar
+    x2+=xvar
+    y1-=yvar
+    y2+=yvar
+    if(x1-x2)**2>(y1-y2)**2:
+        xtextvar=10
+        ytextvar=0
+    else:
+        ytextvar=10
+        xtextvar=0
     ln = Line(Point(x1, y1), Point(x2, y2))
     ln.setArrow("last")
     ln.setWidth(3)
     x = (3 * x1 + x2) // 4
     y = (3 * y1 + y2) // 4
-    pt = Point(x, y)
-    if x1 > x2 or y1 < y2:
+    pt = Point(x+ytextvar, y+xtextvar)
+    if y1-y2>=0:
         ln.setFill('aqua')
 
     else:
         ln.setFill('yellow')
+
     tx = Text(pt, nume)
     tx.setTextColor('red')
     tx.setSize(20)
@@ -107,9 +120,15 @@ def stare(nod, final, win):
         ln.setWidth(3)
         ln.setOutline('green')
         ln.draw(win)
-
     tx = Text(Point(x, y), text)
-    tx.setSize(20)
+    if len(text)>=16:
+        tx.setSize(5)
+    elif len(text)>=10:
+        tx.setSize(10)
+    elif len(text)>=6:
+        tx.setSize(15)
+    else:
+        tx.setSize(20)
     tx.setTextColor('red')
     tx.draw(win)
 
@@ -267,13 +286,8 @@ class Automat:
                     a=self.stari[search2(i,self.stari)]
                     if a not in self.tranzitii.keys():
                         self.tranzitii[a]={}
-                        print(a.nume," da ")
-                    else:
-                        print(a.nume,"nu")
                     self.tranzitii[a][j]=self.stari[search2(st,self.stari)]
 
-        print(self.stari)
-        print(self.tranzitii)
         for i in self.sfin:
             print(i.nume,end=", ")
         print()
